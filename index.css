@@ -1,0 +1,8 @@
+.scaler {
+  position: relative;
+  overflow: hidden;
+}
+
+.scaler-box, .scaler-overlay, .scaler-placeholder {
+  pointer-events: none;
+}

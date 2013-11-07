@@ -1,0 +1,30 @@
+{
+  "name": "touchscaler",
+  "repo": "pgherveou/touchscaler",
+  "description": "scale picture on mobile",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "component/event": "*",
+    "component/events": "*",
+    "component/domify": "*",
+    "pgherveou/prefix": "*",
+    "component/query": "*",
+    "component/has-translate3d": "*",
+    "pgherveou/JavaScript-Load-Image": "*",
+    "component/transitionend-property": "*"
+  },
+
+  "license": "MIT",
+
+  "styles": [
+    "index.css"
+  ],
+
+  "scripts": [
+    "index.js",
+    "template.js"
+  ],
+  "main": "index.js",
+  "remotes": []
+}

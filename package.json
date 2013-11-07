@@ -1,0 +1,42 @@
+{
+  "name": "touchscaler",
+  "version": "0.0.1",
+  "description": "image scaler for touch device",
+  "author": "PG Herveou",
+  "main": "index.js",
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/pgherveou/scaler"
+  },
+
+  "bugs": {
+    "url": "https://github.com/pgherveou/scaler/issues"
+  },
+
+  "keywords": [
+    "image",
+    "scale"
+  ],
+
+  "license": "BSD-2-Clause",
+
+  "homepage": "https://github.com/pgherveou/scaler",
+
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "grunt": "*",
+    "grunt-shell": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-contrib-clean": "*"
+  }
+
+
+}
