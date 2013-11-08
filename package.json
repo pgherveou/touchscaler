@@ -3,11 +3,7 @@
   "version": "0.0.1",
   "description": "image scaler for touch device",
   "author": "PG Herveou",
-  "main": "index.js",
-
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "build/touchscaler.js",
 
   "repository": {
     "type": "git",
@@ -20,10 +16,11 @@
 
   "keywords": [
     "image",
-    "scale"
+    "scale",
+    "touch"
   ],
 
-  "license": "BSD-2-Clause",
+  "license": "MIT",
 
   "homepage": "https://github.com/pgherveou/scaler",
 
