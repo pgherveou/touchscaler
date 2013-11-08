@@ -1,6 +1,6 @@
-
 build: components index.js template.js
 	@component build --dev
+	@component build --standalone touchscaler --name touchscaler
 
 template.js: template.html
 	@component convert $<
