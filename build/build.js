@@ -2500,9 +2500,15 @@ Scaler.prototype.loadImage = function (url) {\n\
     if (canvas.type === 'error') return;\n\
     if (_this.canvas) _this.el.removeChild(_this.canvas);\n\
 \n\
-    //\n\
-    canvas.style.width = canvas.width / _this.opts.quality;\n\
-    canvas.style.height = canvas.height / _this.opts.quality;\n\
+    // set canvas initial styles\n\
+    var canvasWidth = canvas.width / _this.opts.quality,\n\
+        canvasHeight = canvas.height / _this.opts.quality;\n\
+\n\
+    canvas.style.width = canvasWidth,\n\
+    canvas.style.height = canvasHeight;\n\
+\n\
+    canvas.style.marginLeft = -(canvasWidth - width) / 2;\n\
+    canvas.style.marginTop = -(canvasHeight - height) / 2;\n\
 \n\
     // replace existing canvas\n\
     _this.el.insertBefore(canvas, _this.el.firstChild);\n\

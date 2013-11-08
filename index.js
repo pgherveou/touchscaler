@@ -246,9 +246,15 @@ Scaler.prototype.loadImage = function (url) {
     if (canvas.type === 'error') return;
     if (_this.canvas) _this.el.removeChild(_this.canvas);
 
-    //
-    canvas.style.width = canvas.width / _this.opts.quality;
-    canvas.style.height = canvas.height / _this.opts.quality;
+    // set canvas initial styles
+    var canvasWidth = canvas.width / _this.opts.quality,
+        canvasHeight = canvas.height / _this.opts.quality;
+
+    canvas.style.width = canvasWidth,
+    canvas.style.height = canvasHeight;
+
+    canvas.style.marginLeft = -(canvasWidth - width) / 2;
+    canvas.style.marginTop = -(canvasHeight - height) / 2;
 
     // replace existing canvas
     _this.el.insertBefore(canvas, _this.el.firstChild);
