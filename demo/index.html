@@ -29,7 +29,7 @@
       #result-box {
         position: absolute;
         z-index: 1;
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(0, 0, 0, 0.5);
         top: 0; right: 0; bottom: 0; left: 0;
       }
 
@@ -139,13 +139,23 @@
         , scaler = new Scaler(document.getElementById('scaler'));
 
       scaler.loadImage('https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-ash3/537266_10151999842305676_1608924722_n.jpg');
+      // setTimeout(function () {
+      //   // scaler.state.scale = 2;
+      //   scaler.state.translateX = 200;
+      //   scaler.updateStyle();
+      //   showResult();
+      // }, 1000)
+
+      function showResult() {
+        var data = scaler.data();
+        image.src = data.dataURL;
+        result.style.display = 'block';
+        console.log(data);
+      }
 
       result.style.display = 'none';
 
-      btn.addEventListener('click', function () {
-        image.src = scaler.data().dataURL;
-        result.style.display = 'block';
-      });
+      btn.addEventListener('click', showResult);
 
       close.addEventListener('click', function () {
         result.style.display = 'none';

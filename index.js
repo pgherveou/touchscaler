@@ -25,6 +25,7 @@ defaults = {
   transitionSpeed: 0.3,
   rotation: false,
   maxScale: 3,
+  quality: 2
 };
 
 
@@ -43,7 +44,7 @@ function translate(x, y) {
 }
 
 /**
- * get rotate or rotate3d str
+ * get rotate str
  *
  * @param  {Number} x
  * @return {String}
@@ -51,7 +52,6 @@ function translate(x, y) {
  */
 
 function rotate(x) {
-  // if (has3d) return 'rotate3d(' + x + 'deg, 0 , 0)';
   return 'rotate(' + x + 'deg)';
 }
 
@@ -156,12 +156,16 @@ Scaler.prototype.destroy = function () {
 
 /**
  * create output data
+ *
+ * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-drawimage
  * @api public
  */
 
 Scaler.prototype.data = function() {
   if (!this.canvas) return;
-  var canvas, ctx, dh, dw, dx, dy, sh, sw, sx, sy;
+  var canvas, box, ctx, dh, dw, dx, dy, sh, sw, sx, sy;
+
+  box = this.canvas.getBoundingClientRect();
 
   // create canvas
   canvas = document.createElement('canvas');
@@ -173,15 +177,15 @@ Scaler.prototype.data = function() {
   dx = dy = 0;
   dw = canvas.width;
   dh = canvas.height;
-  sw = canvas.width / this.cur.scale;
-  sh = canvas.height / this.cur.scale;
+  sw = this.opts.quality * canvas.width / this.state.scale;
+  sh = this.opts.quality * canvas.height / this.state.scale;
 
-  sx = (this.canvas.width - sw) / 2 - this.cur.translateX / this.cur.scale;
-  sy = (this.canvas.height - sh) / 2 - this.cur.translateY / this.cur.scale;
+  sx = this.opts.quality * (this.bounds.left - box.left) / this.state.scale;
+  sy = this.opts.quality * (this.bounds.top - box.top) / this.state.scale;
   ctx.drawImage(this.canvas, sx, sy, sw, sh, dx, dy, dw, dh);
 
   return {
-    transform: this.cur,
+    transform: this.state,
     filename: this.filename,
     dataURL: canvas.toDataURL()
   };
@@ -220,7 +224,7 @@ Scaler.prototype.loadImage = function (url) {
   this.touch.rotate = 0;
 
   // init previous and current data
-  ['prv', 'cur'].forEach(function (str) {
+  ['prev', 'state'].forEach(function (str) {
     this[str] = {};
     this[str].scale = this.touch.scale;
     this[str].rotate = this.touch.rotate;
@@ -230,8 +234,8 @@ Scaler.prototype.loadImage = function (url) {
 
   // load image opts
   opts = {
-    maxWidth: width * 1.2,
-    maxHeight: height * 1.2,
+    maxWidth: this.opts.quality * width,
+    maxHeight: this.opts.quality * height,
     orientation: true,
     cover: true,
     canvas: true,
@@ -241,14 +245,14 @@ Scaler.prototype.loadImage = function (url) {
   loadImage(url, function (canvas) {
     if (_this.canvas) _this.el.removeChild(_this.canvas);
 
+    //
+    canvas.style.width = canvas.width / _this.opts.quality;
+    canvas.style.height = canvas.height / _this.opts.quality;
+
     // replace existing canvas
     _this.el.insertBefore(canvas, _this.el.firstChild);
     _this.canvas = canvas;
     _this.updateStyle();
-
-    // center canvas
-    _this.canvas.style.marginLeft = -0.5 * (opts.maxWidth - width);
-    _this.canvas.style.marginTop = -0.5 * (opts.maxHeight - height);
 
   }, opts);
 };
@@ -261,7 +265,7 @@ Scaler.prototype.loadImage = function (url) {
  */
 
 Scaler.prototype.acceptTransform = function() {
-  if (this.cur.scale > this.opts.maxScale) return false;
+  if (this.state.scale > this.opts.maxScale) return false;
 
   var box = this.canvas.getBoundingClientRect(),
       bounds = this.bounds;
@@ -295,10 +299,10 @@ Scaler.prototype.touchmove = function(e) {
     || Math.abs(pageY(e) - this.touch.touchmove.pageY) > 30) return;
 
   this.touch.touchmove = e;
-  this.cur.translateX = this.touch.translateX + pageX(e)
+  this.state.translateX = this.touch.translateX + pageX(e)
                       - pageX(this.touch.touchstart);
 
-  this.cur.translateY = this.touch.translateY + pageY(e)
+  this.state.translateY = this.touch.translateY + pageY(e)
                       - pageY(this.touch.touchstart);
 
   // update styles with current values
@@ -307,8 +311,8 @@ Scaler.prototype.touchmove = function(e) {
   if (this.acceptTransform()) {
 
     // update previous values with current
-    this.prv.translateX = this.cur.translateX;
-    this.prv.translateY = this.cur.translateY;
+    this.prev.translateX = this.state.translateX;
+    this.prev.translateY = this.state.translateY;
   }
 };
 
@@ -327,13 +331,16 @@ Scaler.prototype.touchend = function() {
 
   // restore previous values
   if (this.acceptTransform()) {
-    this.touch.translateX = this.cur.translateX;
-    this.touch.translateY = this.cur.translateY;
+    this.touch.translateX = this.state.translateX;
+    this.touch.translateY = this.state.translateY;
   } else {
-    this.cur.translateX = this.touch.translateX = this.prv.translateX;
-    this.cur.translateY = this.touch.translateY = this.prv.translateY;
+    this.state.translateX = this.touch.translateX = this.prev.translateX;
+    this.state.translateY = this.touch.translateY = this.prev.translateY;
     ev.bind(this.canvas, transitionend, removeStyle);
-    this.canvas.style[transition] = 'all ' + this.opts.transitionSpeed + 's ' + this.opts.easing;
+    this.canvas.style[transition] = 'all '
+                              + this.opts.transitionSpeed + 's '
+                              + this.opts.easing;
+
     this.updateStyle();
   }
 };
@@ -347,10 +354,6 @@ Scaler.prototype.touchend = function() {
 
 Scaler.prototype.gesturestart = function(e) {
   this.touch.gesturestart = e;
-  this.cur.translateX = this.touch.translateX + pageX(e)
-                        - pageX(this.touch.touchstart) / 2;
-  this.cur.translateY = this.touch.translateY + pageY(e)
-                        - pageY(this.touch.touchstart) / 2;
 };
 
 /**
@@ -361,20 +364,19 @@ Scaler.prototype.gesturestart = function(e) {
  */
 
 Scaler.prototype.gesturechange = function(e) {
-
-  this.cur.scale = this.touch.scale +
-              this.touch.scale * (e.scale - this.touch.gesturestart.scale);
+  this.state.scale = this.touch.scale
+                 + this.touch.scale * (e.scale - this.touch.gesturestart.scale);
 
   if (this.opts.rotate) {
-    this.cur.rotate = this.touch.rotate + e.rotation
+    this.state.rotate = this.touch.rotate + e.rotation
                     - this.touch.gesturestart.rotation;
   }
 
   this.updateStyle();
 
   if (this.acceptTransform()) {
-    this.prv.scale = this.cur.scale;
-    this.prv.rotate = this.cur.rotate;
+    this.prev.scale = this.state.scale;
+    this.prev.rotate = this.state.rotate;
   }
 };
 
@@ -395,14 +397,16 @@ Scaler.prototype.gestureend = function() {
 
   // restore previous values
   if (this.acceptTransform()) {
-    this.touch.scale  = this.cur.scale;
-    this.touch.rotate = this.cur.rotate;
+    this.touch.scale  = this.state.scale;
+    this.touch.rotate = this.state.rotate;
   } else {
-    this.cur.scale = this.touch.scale = this.prv.scale;
-    this.cur.rotate = this.touch.rotate = this.prv.rotate;
+    this.state.scale = this.touch.scale = this.prev.scale;
+    this.state.rotate = this.touch.rotate = this.prev.rotate;
 
     ev.bind(this.canvas, transitionend, removeStyle);
-    this.canvas.style[transition] = 'all ' + this.opts.transitionSpeed + 's ' + this.opts.easing;
+    this.canvas.style[transition] = 'all '
+                                  + this.opts.transitionSpeed + 's '
+                                  + this.opts.easing;
     this.updateStyle();
   }
 };
@@ -415,9 +419,9 @@ Scaler.prototype.gestureend = function() {
 
 Scaler.prototype.updateStyle = function() {
   this.canvas.style[transform] = [
-    translate(this.cur.translateX,  this.cur.translateY),
-    scale(this.cur.scale),
-    rotate(this.cur.rotate)
+    scale(this.state.scale),
+    translate(this.state.translateX,  this.state.translateY),
+    rotate(this.state.rotate)
   ].join(' ');
 };
 
