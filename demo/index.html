@@ -10,8 +10,24 @@
 
       body {
         font-family: sans-serif;
+        text-align: center;
+        font-size: 12px;
         margin: 0;
       }
+
+      ul {
+        max-width: 400px;
+        margin: 10px auto;
+      }
+
+      .info {
+        display: block;
+        color: #00abea;
+        text-decoration: none;
+        padding: 10px
+      }
+
+
       /**
        * demo stuffs
        */
@@ -122,16 +138,23 @@
     </style>
   </head>
     <div id='scaler' class='scaler'></div>
-    <a id="btn">Get Results</a>
-    <ul>
-      <li>load a new picture or use current one</li>
-      <li>Scale, and translate picture with your fingers</li>
-      <li>Click get results to get the scaled picture</li>
-    </ul>
+    <a id="btn">Create thumbnail</a>
+
     <div id="result-box">
       <img id="result-image"  />
       <a id="close">close</a>
     </div>
+
+    <ul>
+      <li>Load a new picture or use current one</li>
+      <li>Scale, and translate picture with your fingers</li>
+    </ul>
+
+
+    <iframe src="http://ghbtns.com/github-btn.html?user=pgherveou&repo=touchscaler&type=watch&count=true"
+      allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+
+     <a href='http://indiegogo.jogabo.com' class="info">We built this component for our new app, check out our indiegogo campaign to support our project</a>
 
     <script src="../build/build.js"></script>
     <script>
