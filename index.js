@@ -243,6 +243,7 @@ Scaler.prototype.loadImage = function (url) {
   };
 
   loadImage(url, function (canvas) {
+    if (canvas.type === 'error') return;
     if (_this.canvas) _this.el.removeChild(_this.canvas);
 
     //

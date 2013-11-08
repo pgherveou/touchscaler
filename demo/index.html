@@ -138,13 +138,7 @@
         , log = document.getElementById('log')
         , scaler = new Scaler(document.getElementById('scaler'));
 
-      scaler.loadImage('https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-ash3/537266_10151999842305676_1608924722_n.jpg');
-      // setTimeout(function () {
-      //   // scaler.state.scale = 2;
-      //   scaler.state.translateX = 200;
-      //   scaler.updateStyle();
-      //   showResult();
-      // }, 1000)
+      scaler.loadImage('image.jpg');
 
       function showResult() {
         var data = scaler.data();
