@@ -2680,8 +2680,8 @@ Scaler.prototype.gestureend = function() {\n\
 \n\
 Scaler.prototype.updateStyle = function() {\n\
   this.canvas.style[transform] = [\n\
-    scale(this.state.scale),\n\
     translate(this.state.translateX,  this.state.translateY),\n\
+    scale(this.state.scale),\n\
     rotate(this.state.rotate)\n\
   ].join(' ');\n\
 };\n\
