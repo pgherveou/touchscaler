@@ -216,6 +216,12 @@ Scaler.prototype.loadImage = function (url) {
       height = this.el.offsetHeight,
       opts;
 
+  if (url.name) {
+    this.filename = url.name;
+  } else if ('string' === typeof url) {
+    this.filename = url;
+  }
+
   // reset styles
   this.touch = {};
   this.touch.scale = 1;
