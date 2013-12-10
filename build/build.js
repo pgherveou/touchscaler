@@ -2303,15 +2303,15 @@ function Scaler(el, opts) {\n\
   ev.bind(this.el, 'touchmove', cancel);\n\
 \n\
   this.events = events(el, this);\n\
-  this.events.bind('touchstart canvas', 'touchstart');\n\
-  this.events.bind('touchmove canvas', 'touchmove');\n\
-  this.events.bind('touchend canvas', 'touchend');\n\
-  this.events.bind('touchcancel canvas', 'touchend');\n\
+  this.events.bind('touchstart', 'touchstart');\n\
+  this.events.bind('touchmove', 'touchmove');\n\
+  this.events.bind('touchend', 'touchend');\n\
+  this.events.bind('touchcancel', 'touchend');\n\
 \n\
-  this.events.bind('gesturestart canvas', 'gesturestart');\n\
-  this.events.bind('gesturechange canvas', 'gesturechange');\n\
-  this.events.bind('gestureend canvas', 'gestureend');\n\
-  this.events.bind('gesturecancel canvas', 'gestureend');\n\
+  this.events.bind('gesturestart', 'gesturestart');\n\
+  this.events.bind('gesturechange', 'gesturechange');\n\
+  this.events.bind('gestureend', 'gestureend');\n\
+  this.events.bind('gesturecancel', 'gestureend');\n\
 \n\
   this.events.bind('change input[type=\"file\"]', 'loadFile');\n\
 }\n\
@@ -2429,7 +2429,6 @@ Scaler.prototype.loadImage = function (url) {\n\
 \n\
     canvas.style.width = canvasWidth + 'px';\n\
     canvas.style.height = canvasHeight + 'px';\n\
-\n\
     canvas.style.marginLeft = ((width - canvasWidth) / 2) + 'px';\n\
     canvas.style.marginTop = ((height - canvasHeight) / 2) + 'px';\n\
 \n\

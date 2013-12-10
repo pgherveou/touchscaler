@@ -127,15 +127,15 @@ function Scaler(el, opts) {
   ev.bind(this.el, 'touchmove', cancel);
 
   this.events = events(el, this);
-  this.events.bind('touchstart canvas', 'touchstart');
-  this.events.bind('touchmove canvas', 'touchmove');
-  this.events.bind('touchend canvas', 'touchend');
-  this.events.bind('touchcancel canvas', 'touchend');
+  this.events.bind('touchstart', 'touchstart');
+  this.events.bind('touchmove', 'touchmove');
+  this.events.bind('touchend', 'touchend');
+  this.events.bind('touchcancel', 'touchend');
 
-  this.events.bind('gesturestart canvas', 'gesturestart');
-  this.events.bind('gesturechange canvas', 'gesturechange');
-  this.events.bind('gestureend canvas', 'gestureend');
-  this.events.bind('gesturecancel canvas', 'gestureend');
+  this.events.bind('gesturestart', 'gesturestart');
+  this.events.bind('gesturechange', 'gesturechange');
+  this.events.bind('gestureend', 'gestureend');
+  this.events.bind('gesturecancel', 'gestureend');
 
   this.events.bind('change input[type="file"]', 'loadFile');
 }
