@@ -1,6 +1,6 @@
 {
   "name": "touchscaler",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "image scaler for touch device",
   "author": "PG Herveou",
   "main": "build/touchscaler.js",

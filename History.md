@@ -1,4 +1,11 @@
 
+0.0.5 / 2013-12-10
+==================
+
+ * bind on el instead of canvas
+ * add px when setting style
+ * use pageX function to access event ppty
+
 0.0.4 / 2013-12-10
 ==================
 
