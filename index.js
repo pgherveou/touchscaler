@@ -4,12 +4,10 @@
 
 var ev = require('event'),
     events = require('events'),
-    domify = require('domify'),
     query = require('query'),
     has3d = require('has-translate3d'),
     transitionend = require('transitionend-property'),
     prefix = require('prefix'),
-    template = require('./template'),
     loadImage = require('load-image');
 
 /*!
@@ -121,9 +119,6 @@ function Scaler(el, opts) {
       if (!this.opts.hasOwnProperty(opt)) this.opts[opt] = defaults[opt];
     }
   }
-
-  // add template
-  el.appendChild(domify(template));
 
   // box bounds refs
   this.bounds = query('.scaler-box', el).getBoundingClientRect();
@@ -436,6 +431,17 @@ Scaler.prototype.updateStyle = function() {
     scale(this.state.scale),
     rotate(this.state.rotate)
   ].join(' ');
+};
+
+/**
+ * set state and update style
+ *
+ * @api public
+ */
+
+Scaler.prototype.setState = function(state) {
+  this.state = state;
+  this.updateStyle();
 };
 
 /*!

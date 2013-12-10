@@ -534,84 +534,6 @@ function parse(event) {\n\
 }\n\
 //@ sourceURL=component-events/index.js"
 ));
-require.register("component-domify/index.js", Function("exports, require, module",
-"\n\
-/**\n\
- * Expose `parse`.\n\
- */\n\
-\n\
-module.exports = parse;\n\
-\n\
-/**\n\
- * Wrap map from jquery.\n\
- */\n\
-\n\
-var map = {\n\
-  option: [1, '<select multiple=\"multiple\">', '</select>'],\n\
-  optgroup: [1, '<select multiple=\"multiple\">', '</select>'],\n\
-  legend: [1, '<fieldset>', '</fieldset>'],\n\
-  thead: [1, '<table>', '</table>'],\n\
-  tbody: [1, '<table>', '</table>'],\n\
-  tfoot: [1, '<table>', '</table>'],\n\
-  colgroup: [1, '<table>', '</table>'],\n\
-  caption: [1, '<table>', '</table>'],\n\
-  tr: [2, '<table><tbody>', '</tbody></table>'],\n\
-  td: [3, '<table><tbody><tr>', '</tr></tbody></table>'],\n\
-  th: [3, '<table><tbody><tr>', '</tr></tbody></table>'],\n\
-  col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],\n\
-  _default: [0, '', '']\n\
-};\n\
-\n\
-/**\n\
- * Parse `html` and return the children.\n\
- *\n\
- * @param {String} html\n\
- * @return {Array}\n\
- * @api private\n\
- */\n\
-\n\
-function parse(html) {\n\
-  if ('string' != typeof html) throw new TypeError('String expected');\n\
-\n\
-  html = html.replace(/^\\s+|\\s+$/g, ''); // Remove leading/trailing whitespace\n\
-\n\
-  // tag name\n\
-  var m = /<([\\w:]+)/.exec(html);\n\
-  if (!m) return document.createTextNode(html);\n\
-  var tag = m[1];\n\
-\n\
-  // body support\n\
-  if (tag == 'body') {\n\
-    var el = document.createElement('html');\n\
-    el.innerHTML = html;\n\
-    return el.removeChild(el.lastChild);\n\
-  }\n\
-\n\
-  // wrap map\n\
-  var wrap = map[tag] || map._default;\n\
-  var depth = wrap[0];\n\
-  var prefix = wrap[1];\n\
-  var suffix = wrap[2];\n\
-  var el = document.createElement('div');\n\
-  el.innerHTML = prefix + html + suffix;\n\
-  while (depth--) el = el.lastChild;\n\
-\n\
-  // Note: when moving children, don't rely on el.children\n\
-  // being 'live' to support Polymer's broken behaviour.\n\
-  // See: https://github.com/component/domify/pull/23\n\
-  if (1 == el.children.length) {\n\
-    return el.removeChild(el.children[0]);\n\
-  }\n\
-\n\
-  var fragment = document.createDocumentFragment();\n\
-  while (el.children.length) {\n\
-    fragment.appendChild(el.removeChild(el.children[0]));\n\
-  }\n\
-\n\
-  return fragment;\n\
-}\n\
-//@ sourceURL=component-domify/index.js"
-));
 require.register("pgherveou-prefix/index.js", Function("exports, require, module",
 "// module globals\n\
 \n\
@@ -2258,12 +2180,10 @@ require.register("touchscaler/index.js", Function("exports, require, module",
 \n\
 var ev = require('event'),\n\
     events = require('events'),\n\
-    domify = require('domify'),\n\
     query = require('query'),\n\
     has3d = require('has-translate3d'),\n\
     transitionend = require('transitionend-property'),\n\
     prefix = require('prefix'),\n\
-    template = require('./template'),\n\
     loadImage = require('load-image');\n\
 \n\
 /*!\n\
@@ -2376,9 +2296,6 @@ function Scaler(el, opts) {\n\
     }\n\
   }\n\
 \n\
-  // add template\n\
-  el.appendChild(domify(template));\n\
-\n\
   // box bounds refs\n\
   this.bounds = query('.scaler-box', el).getBoundingClientRect();\n\
 \n\
@@ -2469,6 +2386,12 @@ Scaler.prototype.loadImage = function (url) {\n\
       width = this.el.offsetWidth,\n\
       height = this.el.offsetHeight,\n\
       opts;\n\
+\n\
+  if (url.name) {\n\
+    this.filename = url.name;\n\
+  } else if ('string' === typeof url) {\n\
+    this.filename = url;\n\
+  }\n\
 \n\
   // reset styles\n\
   this.touch = {};\n\
@@ -2686,25 +2609,23 @@ Scaler.prototype.updateStyle = function() {\n\
   ].join(' ');\n\
 };\n\
 \n\
+/**\n\
+ * set state and update style\n\
+ *\n\
+ * @api public\n\
+ */\n\
+\n\
+Scaler.prototype.setState = function(state) {\n\
+  this.state = state;\n\
+  this.updateStyle();\n\
+};\n\
+\n\
 /*!\n\
  * module exports\n\
  */\n\
 \n\
 module.exports = Scaler;//@ sourceURL=touchscaler/index.js"
 ));
-require.register("touchscaler/template.js", Function("exports, require, module",
-"module.exports = '<div class=\"scaler-placeholder\"></div>\\n\
-<div class=\"scaler-overlay\"></div>\\n\
-<div class=\"scaler-box\"></div>\\n\
-<div class=\"scaler-file-picker\">\\n\
-  <input name=\"file\" type=\"file\">\\n\
-</div>\\n\
-\\n\
-\\n\
-';//@ sourceURL=touchscaler/template.js"
-));
-
-
 
 
 
@@ -2734,9 +2655,6 @@ require.alias("component-query/index.js", "component-matches-selector/deps/query
 
 require.alias("discore-closest/index.js", "discore-closest/index.js");
 require.alias("component-event/index.js", "component-delegate/deps/event/index.js");
-
-require.alias("component-domify/index.js", "touchscaler/deps/domify/index.js");
-require.alias("component-domify/index.js", "domify/index.js");
 
 require.alias("pgherveou-prefix/index.js", "touchscaler/deps/prefix/index.js");
 require.alias("pgherveou-prefix/index.js", "touchscaler/deps/prefix/index.js");

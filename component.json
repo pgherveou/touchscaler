@@ -8,7 +8,6 @@
   "dependencies": {
     "component/event": "*",
     "component/events": "*",
-    "component/domify": "*",
     "pgherveou/prefix": "*",
     "component/query": "*",
     "component/has-translate3d": "*",
@@ -23,8 +22,7 @@
   ],
 
   "scripts": [
-    "index.js",
-    "template.js"
+    "index.js"
   ],
   "main": "index.js",
   "remotes": []
