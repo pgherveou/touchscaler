@@ -2430,8 +2430,8 @@ Scaler.prototype.loadImage = function (url) {\n\
     canvas.style.width = canvasWidth,\n\
     canvas.style.height = canvasHeight;\n\
 \n\
-    canvas.style.marginLeft = -(canvasWidth - width) / 2;\n\
-    canvas.style.marginTop = -(canvasHeight - height) / 2;\n\
+    canvas.style.marginLeft = ((width - canvasWidth) / 2) + 'px';\n\
+    canvas.style.marginTop = ((height - canvasHeight) / 2) + 'px';\n\
 \n\
     // replace existing canvas\n\
     _this.el.insertBefore(canvas, _this.el.firstChild);\n\
