@@ -2479,8 +2479,8 @@ Scaler.prototype.touchstart = function(e) {\n\
  */\n\
 \n\
 Scaler.prototype.touchmove = function(e) {\n\
-  if ( Math.abs(pageX(e) - this.touch.touchmove.pageX) > 30\n\
-    || Math.abs(pageY(e) - this.touch.touchmove.pageY) > 30) return;\n\
+  if ( Math.abs(pageX(e) - pageX(this.touch.touchmove)) > 30\n\
+    || Math.abs(pageY(e) - pageY(this.touch.touchmove)) > 30) return;\n\
 \n\
   this.touch.touchmove = e;\n\
   this.state.translateX = this.touch.translateX + pageX(e)\n\
