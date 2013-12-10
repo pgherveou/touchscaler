@@ -2427,8 +2427,8 @@ Scaler.prototype.loadImage = function (url) {\n\
     var canvasWidth = canvas.width / _this.opts.quality,\n\
         canvasHeight = canvas.height / _this.opts.quality;\n\
 \n\
-    canvas.style.width = canvasWidth,\n\
-    canvas.style.height = canvasHeight;\n\
+    canvas.style.width = canvasWidth + 'px';\n\
+    canvas.style.height = canvasHeight + 'px';\n\
 \n\
     canvas.style.marginLeft = ((width - canvasWidth) / 2) + 'px';\n\
     canvas.style.marginTop = ((height - canvasHeight) / 2) + 'px';\n\
