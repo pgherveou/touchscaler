@@ -2268,16 +2268,6 @@ function pageY(e) {
 }
 
 /**
- * cancel
- * @param {Event} e
- * @api private
- */
-
-function cancel(e) {
-  e.preventDefault();
-}
-
-/**
  * Scaler constructor
  *
  * @param {Element} el
@@ -2300,9 +2290,6 @@ function Scaler(el, opts) {
   // box bounds refs
   this.bounds = query('.scaler-box', el).getBoundingClientRect();
 
-  // bind events
-  ev.bind(this.el, 'touchmove', cancel);
-
   this.events = events(el, this);
   this.events.bind('touchstart', 'touchstart');
   this.events.bind('touchmove', 'touchmove');
@@ -2313,8 +2300,6 @@ function Scaler(el, opts) {
   this.events.bind('gesturechange', 'gesturechange');
   this.events.bind('gestureend', 'gestureend');
   this.events.bind('gesturecancel', 'gestureend');
-
-  this.events.bind('change input[type="file"]', 'loadFile');
 }
 
 /**
@@ -2322,7 +2307,6 @@ function Scaler(el, opts) {
  */
 
 Scaler.prototype.destroy = function () {
-  ev.unbind(this.el, 'touchmove', cancel);
   this.events.unbind();
 };
 
@@ -2361,18 +2345,6 @@ Scaler.prototype.data = function() {
     filename: this.filename,
     dataURL: canvas.toDataURL()
   };
-};
-
-/**
- * load file
- *
- * @api private
- */
-
-Scaler.prototype.loadFile = function(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  this.loadImage(file);
 };
 
 /**
@@ -2479,6 +2451,9 @@ Scaler.prototype.touchstart = function(e) {
  */
 
 Scaler.prototype.touchmove = function(e) {
+  // prevent scrolling
+  e.preventDefault();
+
   if ( Math.abs(pageX(e) - pageX(this.touch.touchmove)) > 30
     || Math.abs(pageY(e) - pageY(this.touch.touchmove)) > 30) return;
 

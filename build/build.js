@@ -2267,16 +2267,6 @@ function pageY(e) {\n\
 }\n\
 \n\
 /**\n\
- * cancel\n\
- * @param {Event} e\n\
- * @api private\n\
- */\n\
-\n\
-function cancel(e) {\n\
-  e.preventDefault();\n\
-}\n\
-\n\
-/**\n\
  * Scaler constructor\n\
  *\n\
  * @param {Element} el\n\
@@ -2299,9 +2289,6 @@ function Scaler(el, opts) {\n\
   // box bounds refs\n\
   this.bounds = query('.scaler-box', el).getBoundingClientRect();\n\
 \n\
-  // bind events\n\
-  ev.bind(this.el, 'touchmove', cancel);\n\
-\n\
   this.events = events(el, this);\n\
   this.events.bind('touchstart', 'touchstart');\n\
   this.events.bind('touchmove', 'touchmove');\n\
@@ -2312,8 +2299,6 @@ function Scaler(el, opts) {\n\
   this.events.bind('gesturechange', 'gesturechange');\n\
   this.events.bind('gestureend', 'gestureend');\n\
   this.events.bind('gesturecancel', 'gestureend');\n\
-\n\
-  this.events.bind('change input[type=\"file\"]', 'loadFile');\n\
 }\n\
 \n\
 /**\n\
@@ -2321,7 +2306,6 @@ function Scaler(el, opts) {\n\
  */\n\
 \n\
 Scaler.prototype.destroy = function () {\n\
-  ev.unbind(this.el, 'touchmove', cancel);\n\
   this.events.unbind();\n\
 };\n\
 \n\
@@ -2360,18 +2344,6 @@ Scaler.prototype.data = function() {\n\
     filename: this.filename,\n\
     dataURL: canvas.toDataURL()\n\
   };\n\
-};\n\
-\n\
-/**\n\
- * load file\n\
- *\n\
- * @api private\n\
- */\n\
-\n\
-Scaler.prototype.loadFile = function(e) {\n\
-  var file = e.target.files[0];\n\
-  if (!file) return;\n\
-  this.loadImage(file);\n\
 };\n\
 \n\
 /**\n\
@@ -2478,6 +2450,9 @@ Scaler.prototype.touchstart = function(e) {\n\
  */\n\
 \n\
 Scaler.prototype.touchmove = function(e) {\n\
+  // prevent scrolling\n\
+  e.preventDefault();\n\
+\n\
   if ( Math.abs(pageX(e) - pageX(this.touch.touchmove)) > 30\n\
     || Math.abs(pageY(e) - pageY(this.touch.touchmove)) > 30) return;\n\
 \n\

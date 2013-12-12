@@ -143,7 +143,7 @@
       <div class="scaler-overlay"></div>
       <div class="scaler-box"></div>
       <div class="scaler-file-picker">
-        <input name="file" type="file">
+        <input id='file' name="file" type="file">
       </div>
     </div>
 
@@ -170,6 +170,7 @@
     <script>
       var Scaler = require('touchscaler')
         , btn = document.getElementById('btn')
+        , input = document.getElementById('file')
         , close = document.getElementById('close')
         , result = document.getElementById('result-box')
         , image = document.getElementById('result-image')
@@ -177,6 +178,11 @@
         , scaler = new Scaler(document.getElementById('scaler'));
 
       scaler.loadImage('image.jpg');
+      input.addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        scaler.loadImage(file);
+      });
 
       function showResult() {
         var data = scaler.data();
