@@ -2200,7 +2200,7 @@ defaults = {
   transitionSpeed: 0.3,
   rotation: false,
   maxScale: 3,
-  quality: 2
+  quality: 3
 };
 
 
@@ -2325,16 +2325,20 @@ Scaler.prototype.data = function() {
 
   // create canvas
   canvas = document.createElement('canvas');
-  canvas.width = this.bounds.width;
-  canvas.height = this.bounds.height;
+  // canvas.width = this.bounds.width;
+  // canvas.height = this.bounds.height;
+
+  canvas.width =  this.opts.quality * this.bounds.width;
+  canvas.height = this.opts.quality * this.bounds.height;
 
   // draw image on canvas
   ctx = canvas.getContext('2d');
   dx = dy = 0;
+
   dw = canvas.width;
   dh = canvas.height;
-  sw = this.opts.quality * canvas.width / this.state.scale;
-  sh = this.opts.quality * canvas.height / this.state.scale;
+  sw = canvas.width / this.state.scale;
+  sh = canvas.height / this.state.scale;
 
   sx = this.opts.quality * (this.bounds.left - box.left) / this.state.scale;
   sy = this.opts.quality * (this.bounds.top - box.top) / this.state.scale;
