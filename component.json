@@ -11,7 +11,7 @@
     "pgherveou/prefix": "*",
     "component/query": "*",
     "component/has-translate3d": "*",
-    "pgherveou/JavaScript-Load-Image": "*",
+    "pgherveou/load-image": "*",
     "component/transitionend-property": "*"
   },
 

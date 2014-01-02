@@ -658,7 +658,7 @@ document.body.removeChild(el);
 module.exports = null != val && val.length && 'none' != val;
 
 });
-require.register("pgherveou-JavaScript-Load-Image/js/index.js", function(exports, require, module){
+require.register("pgherveou-load-image/js/index.js", function(exports, require, module){
 module.exports = require("./load-image.js");
 
 require('./load-image-ios.js');
@@ -667,7 +667,7 @@ require('./load-image-meta.js');
 require('./load-image-exif.js');
 require('./load-image-exif-map.js');
 });
-require.register("pgherveou-JavaScript-Load-Image/js/load-image.js", function(exports, require, module){
+require.register("pgherveou-load-image/js/load-image.js", function(exports, require, module){
 /*
  * JavaScript Load Image 1.9.0
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -948,7 +948,7 @@ require.register("pgherveou-JavaScript-Load-Image/js/load-image.js", function(ex
 }(this));
 
 });
-require.register("pgherveou-JavaScript-Load-Image/js/load-image-ios.js", function(exports, require, module){
+require.register("pgherveou-load-image/js/load-image-ios.js", function(exports, require, module){
 /*
  * JavaScript Load Image iOS scaling fixes 1.0.3
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -1136,7 +1136,7 @@ require.register("pgherveou-JavaScript-Load-Image/js/load-image-ios.js", functio
 }));
 
 });
-require.register("pgherveou-JavaScript-Load-Image/js/load-image-orientation.js", function(exports, require, module){
+require.register("pgherveou-load-image/js/load-image-orientation.js", function(exports, require, module){
 /*
  * JavaScript Load Image Orientation 1.0.0
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -1303,7 +1303,7 @@ require.register("pgherveou-JavaScript-Load-Image/js/load-image-orientation.js",
 }));
 
 });
-require.register("pgherveou-JavaScript-Load-Image/js/load-image-meta.js", function(exports, require, module){
+require.register("pgherveou-load-image/js/load-image-meta.js", function(exports, require, module){
 /*
  * JavaScript Load Image Meta 1.0.1
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -1447,7 +1447,7 @@ require.register("pgherveou-JavaScript-Load-Image/js/load-image-meta.js", functi
 }));
 
 });
-require.register("pgherveou-JavaScript-Load-Image/js/load-image-exif.js", function(exports, require, module){
+require.register("pgherveou-load-image/js/load-image-exif.js", function(exports, require, module){
 /*
  * JavaScript Load Image Exif Parser 1.0.0
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -1754,7 +1754,7 @@ require.register("pgherveou-JavaScript-Load-Image/js/load-image-exif.js", functi
 }));
 
 });
-require.register("pgherveou-JavaScript-Load-Image/js/load-image-exif-map.js", function(exports, require, module){
+require.register("pgherveou-load-image/js/load-image-exif-map.js", function(exports, require, module){
 /*
  * JavaScript Load Image Exif Map 1.0.1
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -2646,16 +2646,16 @@ require.alias("component-has-translate3d/index.js", "touchscaler/deps/has-transl
 require.alias("component-has-translate3d/index.js", "has-translate3d/index.js");
 require.alias("component-transform-property/index.js", "component-has-translate3d/deps/transform-property/index.js");
 
-require.alias("pgherveou-JavaScript-Load-Image/js/index.js", "touchscaler/deps/load-image/js/index.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/load-image.js", "touchscaler/deps/load-image/js/load-image.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/load-image-ios.js", "touchscaler/deps/load-image/js/load-image-ios.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/load-image-orientation.js", "touchscaler/deps/load-image/js/load-image-orientation.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/load-image-meta.js", "touchscaler/deps/load-image/js/load-image-meta.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/load-image-exif.js", "touchscaler/deps/load-image/js/load-image-exif.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/load-image-exif-map.js", "touchscaler/deps/load-image/js/load-image-exif-map.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/index.js", "touchscaler/deps/load-image/index.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/index.js", "load-image/index.js");
-require.alias("pgherveou-JavaScript-Load-Image/js/index.js", "pgherveou-JavaScript-Load-Image/index.js");
+require.alias("pgherveou-load-image/js/index.js", "touchscaler/deps/load-image/js/index.js");
+require.alias("pgherveou-load-image/js/load-image.js", "touchscaler/deps/load-image/js/load-image.js");
+require.alias("pgherveou-load-image/js/load-image-ios.js", "touchscaler/deps/load-image/js/load-image-ios.js");
+require.alias("pgherveou-load-image/js/load-image-orientation.js", "touchscaler/deps/load-image/js/load-image-orientation.js");
+require.alias("pgherveou-load-image/js/load-image-meta.js", "touchscaler/deps/load-image/js/load-image-meta.js");
+require.alias("pgherveou-load-image/js/load-image-exif.js", "touchscaler/deps/load-image/js/load-image-exif.js");
+require.alias("pgherveou-load-image/js/load-image-exif-map.js", "touchscaler/deps/load-image/js/load-image-exif-map.js");
+require.alias("pgherveou-load-image/js/index.js", "touchscaler/deps/load-image/index.js");
+require.alias("pgherveou-load-image/js/index.js", "load-image/index.js");
+require.alias("pgherveou-load-image/js/index.js", "pgherveou-load-image/index.js");
 require.alias("component-transitionend-property/index.js", "touchscaler/deps/transitionend-property/index.js");
 require.alias("component-transitionend-property/index.js", "touchscaler/deps/transitionend-property/index.js");
 require.alias("component-transitionend-property/index.js", "transitionend-property/index.js");
