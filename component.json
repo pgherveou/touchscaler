@@ -2,7 +2,7 @@
   "name": "touchscaler",
   "repo": "pgherveou/touchscaler",
   "description": "load and scale picture on touch device",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "keywords": ["image", "scale", "touch"],
 
   "dependencies": {
