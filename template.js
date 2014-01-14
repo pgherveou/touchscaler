@@ -1,1 +1,0 @@
-module.exports = '<div class="scaler-placeholder"></div>\n<div class="scaler-overlay"></div>\n<div class="scaler-box"></div>\n<div class="scaler-file-picker">\n  <input name="file" type="file">\n</div>\n\n\n';

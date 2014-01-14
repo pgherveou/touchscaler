@@ -2390,31 +2390,37 @@ Scaler.prototype.loadImage = function (url) {
   opts = {
     maxWidth: this.opts.quality * width,
     maxHeight: this.opts.quality * height,
-    orientation: true,
     cover: true,
     canvas: true,
     crossOrigin: true
   };
 
-  loadImage(url, function (canvas) {
-    if (canvas.type === 'error') return;
-    if (_this.canvas) _this.el.removeChild(_this.canvas);
+  loadImage.parseMetaData(url, function (data) {
 
-    // set canvas initial styles
-    var canvasWidth = canvas.width / _this.opts.quality,
-        canvasHeight = canvas.height / _this.opts.quality;
+    // load orientation from exif data
+    if (data.exif) opts.orientation = data.exif.get('Orientation');
 
-    canvas.style.width = canvasWidth + 'px';
-    canvas.style.height = canvasHeight + 'px';
-    canvas.style.marginLeft = ((width - canvasWidth) / 2) + 'px';
-    canvas.style.marginTop = ((height - canvasHeight) / 2) + 'px';
+    // load image
+    loadImage(url, function (canvas) {
+      if (canvas.type === 'error') return;
+      if (_this.canvas) _this.el.removeChild(_this.canvas);
 
-    // replace existing canvas
-    _this.el.insertBefore(canvas, _this.el.firstChild);
-    _this.canvas = canvas;
-    _this.updateStyle();
+      // set canvas initial styles
+      var canvasWidth = canvas.width / _this.opts.quality,
+          canvasHeight = canvas.height / _this.opts.quality;
 
-  }, opts);
+      canvas.style.width = canvasWidth + 'px';
+      canvas.style.height = canvasHeight + 'px';
+      canvas.style.marginLeft = ((width - canvasWidth) / 2) + 'px';
+      canvas.style.marginTop = ((height - canvasHeight) / 2) + 'px';
+
+      // replace existing canvas
+      _this.el.insertBefore(canvas, _this.el.firstChild);
+      _this.canvas = canvas;
+      _this.updateStyle();
+
+    }, opts);
+  });
 };
 
 /**

@@ -2389,31 +2389,37 @@ Scaler.prototype.loadImage = function (url) {\n\
   opts = {\n\
     maxWidth: this.opts.quality * width,\n\
     maxHeight: this.opts.quality * height,\n\
-    orientation: true,\n\
     cover: true,\n\
     canvas: true,\n\
     crossOrigin: true\n\
   };\n\
 \n\
-  loadImage(url, function (canvas) {\n\
-    if (canvas.type === 'error') return;\n\
-    if (_this.canvas) _this.el.removeChild(_this.canvas);\n\
+  loadImage.parseMetaData(url, function (data) {\n\
 \n\
-    // set canvas initial styles\n\
-    var canvasWidth = canvas.width / _this.opts.quality,\n\
-        canvasHeight = canvas.height / _this.opts.quality;\n\
+    // load orientation from exif data\n\
+    if (data.exif) opts.orientation = data.exif.get('Orientation');\n\
 \n\
-    canvas.style.width = canvasWidth + 'px';\n\
-    canvas.style.height = canvasHeight + 'px';\n\
-    canvas.style.marginLeft = ((width - canvasWidth) / 2) + 'px';\n\
-    canvas.style.marginTop = ((height - canvasHeight) / 2) + 'px';\n\
+    // load image\n\
+    loadImage(url, function (canvas) {\n\
+      if (canvas.type === 'error') return;\n\
+      if (_this.canvas) _this.el.removeChild(_this.canvas);\n\
 \n\
-    // replace existing canvas\n\
-    _this.el.insertBefore(canvas, _this.el.firstChild);\n\
-    _this.canvas = canvas;\n\
-    _this.updateStyle();\n\
+      // set canvas initial styles\n\
+      var canvasWidth = canvas.width / _this.opts.quality,\n\
+          canvasHeight = canvas.height / _this.opts.quality;\n\
 \n\
-  }, opts);\n\
+      canvas.style.width = canvasWidth + 'px';\n\
+      canvas.style.height = canvasHeight + 'px';\n\
+      canvas.style.marginLeft = ((width - canvasWidth) / 2) + 'px';\n\
+      canvas.style.marginTop = ((height - canvasHeight) / 2) + 'px';\n\
+\n\
+      // replace existing canvas\n\
+      _this.el.insertBefore(canvas, _this.el.firstChild);\n\
+      _this.canvas = canvas;\n\
+      _this.updateStyle();\n\
+\n\
+    }, opts);\n\
+  });\n\
 };\n\
 \n\
 /**\n\

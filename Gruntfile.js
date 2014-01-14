@@ -45,7 +45,7 @@ module.exports = function(grunt) {
         spawn: false
       },
       component: {
-        files: ['component.json', 'index.js', 'template.html', 'test/index.js'],
+        files: ['component.json', 'index.js', 'test/index.js'],
         tasks: ['shell:build']
       },
       demo: {
