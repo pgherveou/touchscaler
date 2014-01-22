@@ -190,7 +190,7 @@ Scaler.prototype.loadImage = function (url) {
   if (url.name) {
     this.filename = url.name;
   } else if ('string' === typeof url) {
-    this.filename = url;
+    this.filename = url.split('?')[0];
   }
 
   // reset styles
