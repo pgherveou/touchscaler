@@ -2203,7 +2203,6 @@ defaults = {
   quality: 3
 };
 
-
 /**
  * get translate or translate3d str
  *
@@ -2367,7 +2366,7 @@ Scaler.prototype.loadImage = function (url) {
   if (url.name) {
     this.filename = url.name;
   } else if ('string' === typeof url) {
-    this.filename = url;
+    this.filename = url.split('?')[0];
   }
 
   // reset styles
@@ -2669,7 +2668,7 @@ require.alias("component-transitionend-property/index.js", "component-transition
 require.alias("touchscaler/index.js", "touchscaler/index.js");if (typeof exports == "object") {
   module.exports = require("touchscaler");
 } else if (typeof define == "function" && define.amd) {
-  define(function(){ return require("touchscaler"); });
+  define([], function(){ return require("touchscaler"); });
 } else {
   this["touchscaler"] = require("touchscaler");
 }})();

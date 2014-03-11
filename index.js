@@ -26,7 +26,6 @@ defaults = {
   quality: 3
 };
 
-
 /**
  * get translate or translate3d str
  *

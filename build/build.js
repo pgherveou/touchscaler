@@ -2202,7 +2202,6 @@ defaults = {\n\
   quality: 3\n\
 };\n\
 \n\
-\n\
 /**\n\
  * get translate or translate3d str\n\
  *\n\
@@ -2366,7 +2365,7 @@ Scaler.prototype.loadImage = function (url) {\n\
   if (url.name) {\n\
     this.filename = url.name;\n\
   } else if ('string' === typeof url) {\n\
-    this.filename = url;\n\
+    this.filename = url.split('?')[0];\n\
   }\n\
 \n\
   // reset styles\n\
