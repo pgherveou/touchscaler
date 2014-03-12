@@ -1,4 +1,3 @@
-
 # touchscaler
 
   load and scale picture on touch device
@@ -8,6 +7,12 @@
   Install with [component(1)](http://component.io):
 
     $ component install pgherveou/touchscaler
+    
+## support
+
+Android does not support gesture events
+So Scaling only works on IOS for now...
+  
 
 ## Stand-alone
 
