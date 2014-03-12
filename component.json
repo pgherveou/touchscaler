@@ -7,7 +7,7 @@
 
   "dependencies": {
     "component/event": "*",
-    "component/events": "*",
+    "EightMedia/hammer.js": "*",
     "pgherveou/prefix": "*",
     "component/query": "*",
     "component/has-translate3d": "*",

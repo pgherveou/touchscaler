@@ -3,7 +3,7 @@
  */
 
 var ev = require('event'),
-    events = require('events'),
+    Hammer = require('hammerjs'),
     query = require('query'),
     has3d = require('has-translate3d'),
     transitionend = require('transitionend-property'),
@@ -21,7 +21,9 @@ var transform = prefix('transform'),
 defaults = {
   easing: 'ease',
   transitionSpeed: 0.3,
-  rotation: false,
+  translate: true,
+  scale: true,
+  rotate: false,
   maxScale: 3,
   quality: 3
 };
@@ -66,30 +68,6 @@ function scale(x) {
 }
 
 /**
- * get event page X
- *
- * @param {Event} e
- * @api private
- */
-
-function pageX(e) {
-  if (e.pageX) return e.pageX;
-  return e.touches[0].pageX;
-}
-
-/**
- * get event page Y
- *
- * @param {Event} e
- * @api private
- */
-
-function pageY(e) {
-  if (e.pageY) return e.pageY;
-  return e.touches[0].pageY;
-}
-
-/**
  * Scaler constructor
  *
  * @param {Element} el
@@ -98,7 +76,10 @@ function pageY(e) {
  */
 
 function Scaler(el, opts) {
+  var _this = this;
+
   this.el = el;
+  this.hammer = new Hammer(el);
 
   // init options
   if (!opts) {
@@ -112,24 +93,30 @@ function Scaler(el, opts) {
   // box bounds refs
   this.bounds = query('.scaler-box', el).getBoundingClientRect();
 
-  this.events = events(el, this);
-  this.events.bind('touchstart', 'touchstart');
-  this.events.bind('touchmove', 'touchmove');
-  this.events.bind('touchend', 'touchend');
-  this.events.bind('touchcancel', 'touchend');
-
-  this.events.bind('gesturestart', 'gesturestart');
-  this.events.bind('gesturechange', 'gesturechange');
-  this.events.bind('gestureend', 'gestureend');
-  this.events.bind('gesturecancel', 'gestureend');
+  // bind gesture events
+  this.bind('pinch drag', 'gesturechange');
+  this.bind('dragend release', 'gestureend');
 }
 
 /**
+ * bind touch event
+ * @api private
+ */
+
+Scaler.prototype.bind = function(ev, method) {
+  var _this = this;
+  this.hammer.on(ev, function(e) {
+    _this[method](e);
+  });
+};
+
+/**
  * remove all events
+ * @api public
  */
 
 Scaler.prototype.destroy = function () {
-  this.events.unbind();
+  this.hammer.dispose();
 };
 
 /**
@@ -192,20 +179,13 @@ Scaler.prototype.loadImage = function (url) {
     this.filename = url.split('?')[0];
   }
 
-  // reset styles
-  this.touch = {};
-  this.touch.scale = 1;
-  this.touch.translateX = 0;
-  this.touch.translateY = 0;
-  this.touch.rotate = 0;
-
-  // init previous and current data
-  ['prev', 'state'].forEach(function (str) {
+  // init state objects
+  ['prev', 'state', 'cur'].forEach(function (str) {
     this[str] = {};
-    this[str].scale = this.touch.scale;
-    this[str].rotate = this.touch.rotate;
-    this[str].translateX = this.touch.translateX;
-    this[str].translateY = this.touch.translateY;
+    this[str].scale = 1;
+    this[str].rotation = 0;
+    this[str].deltaX = 0;
+    this[str].deltaY = 0;
   }, this);
 
   // load image opts
@@ -264,88 +244,6 @@ Scaler.prototype.acceptTransform = function() {
       && box.bottom >= bounds.bottom;
 };
 
-/**
- * store values on touchstart
- *
- * @param  {Event} e
- * @api private
- */
-
-Scaler.prototype.touchstart = function(e) {
-  this.touch.touchmove = this.touch.touchstart = e;
-};
-
-/**
- * transform canvas on touchmove
- *
- * @param  {Event} e
- * @api private
- */
-
-Scaler.prototype.touchmove = function(e) {
-  // prevent scrolling
-  e.preventDefault();
-
-  if ( Math.abs(pageX(e) - pageX(this.touch.touchmove)) > 30
-    || Math.abs(pageY(e) - pageY(this.touch.touchmove)) > 30) return;
-
-  this.touch.touchmove = e;
-  this.state.translateX = this.touch.translateX + pageX(e)
-                      - pageX(this.touch.touchstart);
-
-  this.state.translateY = this.touch.translateY + pageY(e)
-                      - pageY(this.touch.touchstart);
-
-  // update styles with current values
-  this.updateStyle();
-
-  if (this.acceptTransform()) {
-
-    // update previous values with current
-    this.prev.translateX = this.state.translateX;
-    this.prev.translateY = this.state.translateY;
-  }
-};
-
-/**
- * restore invalid translate values on touchend
- * @api private
- */
-
-Scaler.prototype.touchend = function() {
-  var _this = this;
-
-  function removeStyle() {
-    _this.canvas.style[transition] = '';
-    ev.unbind(_this.canvas, transitionend, removeStyle);
-  }
-
-  // restore previous values
-  if (this.acceptTransform()) {
-    this.touch.translateX = this.state.translateX;
-    this.touch.translateY = this.state.translateY;
-  } else {
-    this.state.translateX = this.touch.translateX = this.prev.translateX;
-    this.state.translateY = this.touch.translateY = this.prev.translateY;
-    ev.bind(this.canvas, transitionend, removeStyle);
-    this.canvas.style[transition] = 'all '
-                              + this.opts.transitionSpeed + 's '
-                              + this.opts.easing;
-
-    this.updateStyle();
-  }
-};
-
-/**
- * save gesture values on gesturestart
- *
- * @param  {Event} e
- * @api private
- */
-
-Scaler.prototype.gesturestart = function(e) {
-  this.touch.gesturestart = e;
-};
 
 /**
  * transform on gesturechange
@@ -355,26 +253,27 @@ Scaler.prototype.gesturestart = function(e) {
  */
 
 Scaler.prototype.gesturechange = function(e) {
-  this.state.scale = this.touch.scale
-                 + this.touch.scale * (e.scale - this.touch.gesturestart.scale);
+  e.gesture.preventDefault();
 
-  if (this.opts.rotate) {
-    this.state.rotate = this.touch.rotate + e.rotation
-                    - this.touch.gesturestart.rotation;
-  }
+  this.state.deltaX = this.cur.deltaX + e.gesture.deltaX;
+  this.state.deltaY = this.cur.deltaY + e.gesture.deltaY;
+  this.state.scale = this.cur.scale - 1 + e.gesture.scale;
+  this.state.rotation = this.cur.rotation + e.gesture.rotation;
 
+  // update styles with current values
   this.updateStyle();
 
   if (this.acceptTransform()) {
+    this.prev.deltaX = this.state.deltaX;
+    this.prev.deltaY = this.state.deltaY;
     this.prev.scale = this.state.scale;
-    this.prev.rotate = this.state.rotate;
+    this.prev.rotation = this.state.rotation;
   }
 };
 
 /**
  * restore invalid values on gesturend
  *
- * @param  {Event} e
  * @api private
  */
 
@@ -388,11 +287,15 @@ Scaler.prototype.gestureend = function() {
 
   // restore previous values
   if (this.acceptTransform()) {
-    this.touch.scale  = this.state.scale;
-    this.touch.rotate = this.state.rotate;
+    this.cur.deltaX = this.state.deltaX;
+    this.cur.deltaY = this.state.deltaY;
+    this.cur.scale  = this.state.scale;
+    this.cur.rotation = this.state.rotation;
   } else {
-    this.state.scale = this.touch.scale = this.prev.scale;
-    this.state.rotate = this.touch.rotate = this.prev.rotate;
+    this.state.deltaX = this.cur.deltaX = this.prev.deltaX;
+    this.state.deltaY = this.cur.deltaY = this.prev.deltaY;
+    this.state.scale = this.cur.scale = this.prev.scale;
+    this.state.rotation = this.cur.rotation = this.prev.rotation;
 
     ev.bind(this.canvas, transitionend, removeStyle);
     this.canvas.style[transition] = 'all '
@@ -400,6 +303,8 @@ Scaler.prototype.gestureend = function() {
                                   + this.opts.easing;
     this.updateStyle();
   }
+
+  Hammer.detection.stopDetect();
 };
 
 /**
@@ -409,11 +314,21 @@ Scaler.prototype.gestureend = function() {
  */
 
 Scaler.prototype.updateStyle = function() {
-  this.canvas.style[transform] = [
-    translate(this.state.translateX,  this.state.translateY),
-    scale(this.state.scale),
-    rotate(this.state.rotate)
-  ].join(' ');
+  var transforms = [];
+
+  if (this.opts.translate) {
+    transforms.push(translate(this.state.deltaX,  this.state.deltaY));
+  }
+
+  if (this.opts.scale) {
+    transforms.push(scale(this.state.scale));
+  }
+
+  if (this.opts.rotate) {
+    transforms.push(rotate(this.state.rotation));
+  }
+
+  this.canvas.style[transform] = transforms.join(' ');
 };
 
 /**
